@@ -28,56 +28,46 @@ int test_utilities(void)
 
 	if (MB != 1048576 || GB != 1073741824) {
 		error = 1;
-		metal_log(METAL_LOG_ERROR,
-			  "1 MiB is %ld instead of 1048576 and 1 GiB is %ld instead of 1073741824\n",
+		metal_err("1 MiB is %ld instead of 1048576, 1 GiB is %ld instead of 1073741824\n",
 			  MB, GB);
 	}
 	if (metal_dim(array) != 10) {
 		error = 2;
-		metal_log(METAL_LOG_ERROR,
-			  "Array has %d instead of 10 elements\n",
-			  metal_dim(array));
+		metal_err("Array has %d instead of 10 elements\n", metal_dim(array));
 	}
 	if (metal_dim(c_array) != 7) {
 		error = 3;
-		metal_log(METAL_LOG_ERROR,
-			  "Character array has %d instead of 7 elements\n",
-			  metal_dim(c_array));
+		metal_err("Character array has %d instead of 7 elements\n", metal_dim(c_array));
 	}
 	if (metal_min(10, 4) != 4 || metal_max(198, 2) != 198) {
 		error = 4;
-		metal_log(METAL_LOG_ERROR,
-			  "Minimum between 10 and 4 is %d instead of 4 and maximum between 198 and 2 is %d instead of 198\n",
+		metal_err("Minimum between 10 and 4 is %d instead of 4 and maximum between 198 and 2 is %d instead of 198\n",
 			  metal_min(10, 4), metal_max(198, 2));
 	}
 	if (metal_min(-10, -4) != -10 || metal_max(-198, -2) != -2) {
 		error = 5;
-		metal_log(METAL_LOG_ERROR,
-			  "Minimum between -10 and -4 is %d instead of -10 and maximum between -198 and -2 is %d instead of -2\n",
+		metal_err("Minimum between -10 and -4 is %d instead of -10 and maximum between -198 and -2 is %d instead of -2\n",
 			  metal_min(-10, -4), metal_max(-198, -2));
 	}
 	if (metal_align_down(10, 4) != 8 || metal_align_up(10, 4) != 12) {
 		error = 6;
-		metal_log(METAL_LOG_ERROR,
-			  "10 aligned down to ^4 is %d instead of 8, up to ^4 is %d instead of 12\n",
+		metal_err("10 aligned down to ^4 is %d instead of 8, up to ^4 is %d instead of 12\n",
 			  metal_align_down(10, 4), metal_align_up(10, 4));
 	}
 	if (metal_div_round_down(10, 3) != 3 || metal_div_round_up(10, 3) != 4) {
 		error = 7;
-		metal_log(METAL_LOG_ERROR,
-			  "10 divided by 3 rounded down is %d instead of 3 and rounded up is %d instead of 4\n",
+		metal_err("10 divided by 3 rounded down is %d instead of 3 and rounded up is %d instead of 4\n",
 			  metal_div_round_down(10, 3), metal_div_round_up(10, 3));
 	}
 	if (metal_div_round_down(-10, 3) != -4 || metal_div_round_up(-10, 3) != -3) {
 		error = 8;
-		metal_log(METAL_LOG_ERROR,
-			  "-10 divided by 3 rounded down is %d instead of -4 and rounded up is %d instead of -3\n",
+		metal_err("-10 divided by 3 rounded down is %d instead of -4 and rounded up is %d instead of -3\n",
 			  metal_div_round_down(-10, 3), metal_div_round_up(-10, 3));
 	}
 	if (metal_offset_of(struct example, ptr) != 8) {
 		error = 9;
-		metal_log(METAL_LOG_ERROR,
-			  "%d\n", metal_offset_of(struct example, ptr));
+		metal_err("Offset of test struct is %d instead of 8\n",
+			  metal_offset_of(struct example, ptr));
 	}
 	metal_finish();
 	return error;

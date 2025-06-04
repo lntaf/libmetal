@@ -32,16 +32,14 @@ void *array_sum_m(void *a)
 
 		if ((len2 - len1 + 1) % 2 && i == mid) {
 			sum_m += arg->arr[len1 + i];
-			metal_log(METAL_LOG_DEBUG,
-				  "Sum is now %d from adding %d\n",
-				  sum_m, arg->arr[len1 + i]);
+			metal_dbg("Sum is now %d from adding %d\n", sum_m, arg->arr[len1 + i]);
 			metal_mutex_release(&mut);
 			break;
 		}
 		sum_m += arg->arr[len1 + i] + arg->arr[len2 - i];
-		metal_log(METAL_LOG_DEBUG,
-			  "Sum is now %d from adding %d,%d\n",
+		metal_dbg("Sum is now %d from adding %d,%d\n",
 			  sum_m, arg->arr[len1 + i], arg->arr[len2 - i]);
+
 		metal_mutex_release(&mut);
 		usleep(1);
 	}
@@ -82,9 +80,8 @@ int test_mutex(void)
 	pthread_join(tid1, NULL);
 	pthread_join(tid2, NULL);
 
-	metal_log(METAL_LOG_INFO,
-		  "Sum = %d returned for array with values [%d, %d]\n",
-		  sum_m, array[0], array[ARRAY_SIZE - 1]);
+	metal_info("Sum = %d returned for array with values [%d, %d]\n",
+		   sum_m, array[0], array[ARRAY_SIZE - 1]);
 
 	metal_mutex_deinit(&mut);
 	metal_finish();

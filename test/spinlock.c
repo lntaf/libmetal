@@ -32,15 +32,12 @@ void *array_sum_s(void *a)
 
 		if ((len2 - len1 + 1) % 2 && i == mid) {
 			sum_s += arg->arr[len1 + i];
-			metal_log(METAL_LOG_DEBUG,
-				  "Sum is now %d from adding %d\n",
-				  sum_s, arg->arr[len1 + i]);
+			metal_dbg("Sum is now %d from adding %d\n", sum_s, arg->arr[len1 + i]);
 			metal_spinlock_release(&slock);
 			break;
 		}
 		sum_s += arg->arr[len1 + i] + arg->arr[len2 - i];
-		metal_log(METAL_LOG_DEBUG,
-			  "Sum is now %d from adding %d,%d\n",
+		metal_dbg("Sum is now %d from adding %d,%d\n",
 			  sum_s, arg->arr[len1 + i], arg->arr[len2 - i]);
 		metal_spinlock_release(&slock);
 		usleep(1);
@@ -82,9 +79,8 @@ int test_spinlock(void)
 	pthread_join(tid1, NULL);
 	pthread_join(tid2, NULL);
 
-	metal_log(METAL_LOG_INFO,
-		  "Sum = %d returned for array with values [%d, %d]\n",
-		  sum_s, array[0], array[ARRAY_SIZE - 1]);
+	metal_info("Sum = %d returned for array with values [%d, %d]\n",
+		   sum_s, array[0], array[ARRAY_SIZE - 1]);
 
 	metal_finish();
 	return 0;

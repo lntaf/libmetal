@@ -5,24 +5,21 @@
  */
 
 /*
- * @file		init.c
- * @brief		Cross-platform tests for init interface
+ * @file		cpu.c
+ * @brief		Cross-platform tests for cpu interface
  */
 
-int test_init(void)
+int test_cpu(void)
 {
 	struct metal_init_params metal_param = METAL_INIT_DEFAULTS;
-	int init_ret;
 
-	init_ret = metal_init(&metal_param);
+	metal_init(&metal_param);
 	metal_set_log_handler(metal_default_log_handler);
 	metal_set_log_level(METAL_LOG_ERROR);
 
-	if (init_ret)
-		metal_log(METAL_LOG_ERROR,
-			  "init_ret returned %d\n",
-			  init_ret);
+	metal_dbg("CPU Yielding\n");
+	metal_cpu_yield();
 
 	metal_finish();
-	return init_ret;
+	return 0;
 }
