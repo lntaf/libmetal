@@ -67,5 +67,37 @@ else (WITH_ZEPHYR)
     list (APPEND _flist "${CMAKE_CURRENT_BINARY_DIR}/${_f}.c")
   endforeach (INCLUDE)
   add_library (metal-headers STATIC ${_flist})
+<<<<<<< HEAD
+=======
+
+  collector_list(_src_all PROJECT_LIB_TEST_ALL)
+
+  if (WITH_SHARED_LIB)
+    get_property (_linker_options GLOBAL PROPERTY TEST_LINKER_OPTIONS)
+    set (_lib ${PROJECT_NAME}-shared)
+    add_executable(test-all-${_lib} ${_src_all})
+    target_link_libraries(test-all-${_lib} ${PROJECT_NAME}-shared)
+    target_compile_options(test-all-${_lib} PUBLIC ${_ec_flgs})
+    add_dependencies(test-all-${_lib} ${PROJECT_NAME}-shared)
+    install(TARGETS test-all-${_lib} RUNTIME DESTINATION bin)
+    if (WITH_TESTS_EXEC)
+      add_test(test-all-${_lib} test-all-${_lib})
+    endif()
+  endif()
+
+  if (WITH_STATIC_LIB)
+    get_property (_linker_options GLOBAL PROPERTY TEST_LINKER_OPTIONS)
+    set (_lib ${PROJECT_NAME}-static)
+    add_executable (test-all-${_lib} ${_src_all})
+    target_link_libraries (test-all-${_lib} -Wl,-Map=test-all-${_lib}.map ${_linker_options} -Wl,--start-group ${_lib} ${_deps} -Wl,--end-group)
+    install (TARGETS test-all-${_lib} RUNTIME DESTINATION bin)
+    target_compile_options (test-all-${_lib} PUBLIC ${_ec_flgs})
+    add_dependencies (test-all-${_lib}  ${PROJECT_NAME}-static)
+    if (WITH_TESTS_EXEC)
+      add_test (test-all-${_lib} test-all-${_lib})
+    endif (WITH_TESTS_EXEC)
+  endif (WITH_STATIC_LIB)
+
+>>>>>>> 24d62ba (Remove dead code and fix for placeholder system threads.c testing file)
 endif (WITH_ZEPHYR)
 
