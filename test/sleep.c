@@ -29,7 +29,7 @@ int test_sleep(void)
 	ret = metal_sleep_usec(SLEEP_USECONDS);
 	if (ret)
 		metal_err("Function metal_sleep_usec returned %d\n", ret);
-
+	tmp_time = tmp_time;
 	metal_info("Time is now %d\n", time(0));
 	metal_finish();
 	return 0;

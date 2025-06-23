@@ -21,7 +21,7 @@ int test_log(void)
 	metal_dbg("Metal log level is: %d\n", metal_get_log_level());
 
 	for (int i = 0; i <= METAL_LOG_DEBUG; i++)
-		metal_log(i, "Level %d log example\n", i);
+		metal_log((enum metal_log_level)i, "Level %d log example\n", i);
 
 	metal_finish();
 	return 0;

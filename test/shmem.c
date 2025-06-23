@@ -12,7 +12,7 @@
 int test_shmem(void)
 {
 	struct metal_init_params metal_param = METAL_INIT_DEFAULTS;
-	struct metal_io_region **res;
+	struct metal_io_region **res = NULL;
 	int ret = 0;
 
 	metal_init(&metal_param);

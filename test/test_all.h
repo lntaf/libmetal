@@ -28,6 +28,7 @@
 #include <metal/sys.h>
 #include <metal/time.h>
 #include <metal/utilities.h>
+#include "metal-test.h"
 
 #include "alloc.c"
 #include "assert.c"

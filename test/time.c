@@ -33,7 +33,7 @@ int test_time(void)
 		metal_err("Function metal_sleep_usec returned %d\n", ret);
 		return 1;
 	}
-
+	tmp_time = tmp_time;
 	metal_dbg("Time is now %ulld\n", metal_get_timestamp());
 	metal_finish();
 	return 0;

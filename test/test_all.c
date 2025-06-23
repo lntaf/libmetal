@@ -11,9 +11,9 @@
 
 #include "test_all.h"
 
-int main(int argc, char **argv)
+int main(void)
 {
-	int i;
+	unsigned long int i;
 	char pass[] = "\033[0;32m [PASS] \033[0m";
 	char fail[] = "\033[0;31m [FAIL] \033[0m";
 
