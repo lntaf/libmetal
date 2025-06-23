@@ -7,41 +7,32 @@
 /*
  * @file		mutex.c
  * @brief		Cross-platform tests for mutex interface, pthread based
+ *
+ * Simple test that creates an array with values [1, ARRAY_SIZE] and
+ * sums their values using threads and libmetal's mutex interface
  */
 
 #define ARRAY_SIZE 100
 
-int sum_m;
-metal_mutex_t mut;
+static int sum_m;
+static metal_mutex_t mut;
+static int idx;
 
-struct args_m  {
-	int *arr;
-	int len1;
-	int len2;
-};
+static int array[ARRAY_SIZE];
 
 void *array_sum_m(void *a)
 {
-	struct args_m *arg = (struct args_m *)a;
-	int len1 = arg->len1;
-	int len2 = arg->len2;
-	int mid = (len2 - len1) / 2;
-
-	for (int i = 0; i <= mid; i++) {
+	metal_unused(a);
+	while (1) {
 		metal_mutex_acquire(&mut);
-
-		if ((len2 - len1 + 1) % 2 && i == mid) {
-			sum_m += arg->arr[len1 + i];
-			metal_dbg("Sum is now %d from adding %d\n", sum_m, arg->arr[len1 + i]);
+		if (idx >= ARRAY_SIZE) {
 			metal_mutex_release(&mut);
 			break;
 		}
-		sum_m += arg->arr[len1 + i] + arg->arr[len2 - i];
-		metal_dbg("Sum is now %d from adding %d,%d\n",
-			  sum_m, arg->arr[len1 + i], arg->arr[len2 - i]);
-
+		sum_m += array[idx];
+		metal_dbg("Sum is now %d after incrementing by %d\n", sum_m, array[idx]);
+		idx++;
 		metal_mutex_release(&mut);
-		usleep(1);
 	}
 
 	return NULL;
@@ -50,16 +41,13 @@ void *array_sum_m(void *a)
 int test_mutex(void)
 {
 	struct metal_init_params metal_param = METAL_INIT_DEFAULTS;
-	int array[ARRAY_SIZE];
+	int expected = 0;
 
 	for (int i = 0; i < ARRAY_SIZE; i++) {
 		array[i] = i + 1;
 	}
 
-	int length = sizeof(array) / sizeof(int);
-	struct args_m args1 = {array, length / 2, length - 1};
-	struct args_m args2 = {array, 0, length / 2 - 1};
-	pthread_t tid1, tid2;
+	idx = 0;
 
 	metal_init(&metal_param);
 	metal_mutex_init(&mut);
@@ -67,24 +55,20 @@ int test_mutex(void)
 	metal_set_log_handler(metal_default_log_handler);
 	metal_set_log_level(METAL_LOG_ERROR);
 
-	pthread_create(&tid1,
-		       NULL,
-		       array_sum_m,
-		       &args1);
-
-	pthread_create(&tid2,
-		       NULL,
-		       array_sum_m,
-		       &args2);
-
-	pthread_join(tid1, NULL);
-	pthread_join(tid2, NULL);
+	metal_test_run(2, array_sum_m, NULL);
 
 	metal_info("Sum = %d returned for array with values [%d, %d]\n",
 		   sum_m, array[0], array[ARRAY_SIZE - 1]);
 
 	metal_mutex_deinit(&mut);
 	metal_finish();
+
+	expected = (ARRAY_SIZE * (array[0] + array[ARRAY_SIZE - 1])) / 2;
+	if (sum_m != expected) {
+		/*Sum of array should be n/2 * (first + last numbers)*/
+		metal_err("Array sum is %d instead of %d elements\n", sum_m, expected);
+		return 1;
+	}
 
 	return 0;
 }
