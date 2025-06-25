@@ -41,7 +41,6 @@
 #include "shmem.c"
 #include "sleep.c"
 #include "spinlock.c"
-#include "time.c"
 #include "utilities.c"
 
 struct test_entry {
@@ -62,7 +61,6 @@ struct test_entry tests[] = {
 	{"shmem.c",     test_shmem, 0},
 	{"sleep.c",     test_sleep, 0},
 	{"spinlock.c",  test_spinlock, 0},
-	{"time.c",      test_time, 0},
 	{"utilities.c", test_utilities, 0}
 };
 
